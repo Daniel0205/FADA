@@ -15,7 +15,7 @@ float pi=3.14159265359;
 void leerArchivo(int *largo,int *ancho, vector<int> *posicion, vector<int> *radio){
 	int aux;
 	
-	ifstream archivo("archivo.txt");
+	ifstream archivo("archivo1.txt");
 	archivo >> *largo;
 	archivo >> *ancho;	
 	
