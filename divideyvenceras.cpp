@@ -73,6 +73,73 @@ void elementos(vector<int> posicion,vector<int> radio,vector<int> *posicion1,vec
 }
 
 
+
+void mergeSort(vector<int>&leftPos, vector<int>&rightPos,vector<int>&leftRad, vector<int>& rightRad, vector<int>& pos,vector<int>& rad)
+{
+    int nL = leftPos.size();
+    int nR = rightPos.size();
+    int i = 0, j = 0, k = 0;
+	
+    while (j < nL && k < nR) 
+    {	
+        if (leftPos[j]+leftRad[i] < rightPos[k]+rightRad[i]) {
+            pos[i] = leftPos[j];
+            rad[i] =leftRad[j];
+            j++;
+        }
+        else {
+            pos[i] = rightPos[k];
+            rad[i] = rightRad[k];
+            k++;
+        }
+        i++;
+    }
+    
+	
+	
+    while (j < nL) {
+        pos[i] = leftPos[j];
+        rad[i] = leftRad[j];
+        j++; i++;
+    }
+    while (k < nR) {
+        pos[i] = rightPos[k];
+        rad[i] = rightRad[k];
+        k++; i++;
+    }
+
+}
+
+
+void sort(vector<int> & pos,vector<int>& rad) {
+    if (pos.size() <= 1) return;
+
+    int mid = pos.size() / 2;
+    vector<int> leftPos;
+    vector<int> rightPos;
+    vector<int> leftRad;
+    vector<int> rightRad;
+    
+
+    
+
+    for (int j = 0; j < mid;j++){
+        leftPos.push_back(pos[j]);
+        leftRad.push_back(rad[j]);
+	}
+    for (int j = 0; j < (int)(pos.size()) - mid; j++){
+        rightPos.push_back(pos[mid + j]);
+        rightRad.push_back(rad[mid+j]);
+	}
+
+	
+	
+    sort(leftPos,leftRad);
+    sort(rightPos,rightRad);
+    mergeSort(leftPos, rightPos,leftRad,rightRad, pos,rad);
+}
+
+
 //Funcion main
 int main(){
 	int largo,ancho;
@@ -83,6 +150,9 @@ int main(){
 	
 	//Se leen el archivo y se le asignan los datos a los vectores
 	leerArchivo(&largo,&ancho,&posicion, &radio);
+	
+	sort(posicion,radio);	
+
 	
 	//cout << maxArea(posicion,radio,0,0)<< endl;
 	elementos(posicion,radio,&posicion1,&radio1);
