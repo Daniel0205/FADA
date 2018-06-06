@@ -67,92 +67,72 @@ void llenarMatriz(int largo,vector<int> posicion,vector<int> radio,float **matri
 	}	
 }
 
-void Merge(int* A,int* hola,int p,int q,int r) {
-    int n1=q-p+1;
-    int n2=r-q;
-    int L[n1+1];
-    int L1[n1+1];
-    int R[n2+1];
-    int R1[n2+1];
-    for(int i=0; i<n1; i++){
-		 L[i]=A[p+i];
-		 L1[i]=hola[p+i];
-	 }
-    for(int j=0; j<n2; j++){
-		 R[j]=A[q+1+j];
-		 R1[j]=hola[q+1+j];		 
-	 }
-	 		for (int i = 0; i < tamano; i++){
-			cout << A[i] << "-" << hola[i]	<<endl;		
-		}
-		cout<< "------------------" << endl;
-	 
-    int i=0;
-    int j=0;
-    int n=0;
-    while(i!=n1 && j!=n2) {
-        if(L[i]+L1[i]>R[j]+R1[j]) {
-            A[p+n]=R[j];
-            hola[p+n]=R1[j];
-            j++;
-        } else {
-            A[p+n]=L[i];
-            hola[p+n]=L1[i];
-            i++;
-        }
-        n++;
-    }
-    while(j!=n2) {
-        A[p+n]=R[j];
-        hola[p+n]=L1[i];
-        j++;
-        n++;
-    }
-    while(i!=n1) {
-        A[p+n]=L[i];
-        hola[p+n]=L1[i];
-        i++;
-        n++;
-    }
-}
-void MergeSort(int *A,int *B,int p,int r) {
-    if(r>p) {
-        int q;
-        q=(p+r)/2;
-        MergeSort(A,B,p,q);
-        MergeSort(A,B,q+1,r);
-        Merge(A,B,p,q,r);
-    }
-}
 
-
-void ordenarVectores(vector<int> *posicion,vector<int> *radio){
-		int *a=new int[(int)posicion->size()];
-		int *b=new int[(int)posicion->size()];
-		tamano=(int)posicion->size();
-		
-		for (int i = tamano-1; i >=0 ; i--){
-			a[i]=posicion[0][i];
-			b[i]=radio[0][i];
-			posicion->pop_back();
-			radio->pop_back();
-		}
-
-		
-		
-		MergeSort(a,b,0,tamano-1);
-
-		cout<< tamano <<endl;
-		
-		for (int i = 0; i <tamano ; i++){
-			//cout << i << endl;
-			posicion->push_back(a[i]);
-			radio->push_back(b[i]);
-		}
-		
-			
+void mergeSort(vector<int>&leftPos, vector<int>&rightPos,vector<int>&leftRad, vector<int>& rightRad, vector<int>& pos,vector<int>& rad)
+{
+    int nL = leftPos.size();
+    int nR = rightPos.size();
+    int i = 0, j = 0, k = 0;
 	
+    while (j < nL && k < nR) 
+    {	
+        if (leftPos[j]+leftRad[i] < rightPos[k]+rightRad[i]) {
+            pos[i] = leftPos[j];
+            rad[i] =leftRad[j];
+            j++;
+        }
+        else {
+            pos[i] = rightPos[k];
+            rad[i] = rightRad[k];
+            k++;
+        }
+        i++;
+    }
+    
+	
+	
+    while (j < nL) {
+        pos[i] = leftPos[j];
+        rad[i] = leftRad[j];
+        j++; i++;
+    }
+    while (k < nR) {
+        pos[i] = rightPos[k];
+        rad[i] = rightRad[k];
+        k++; i++;
+    }
+
 }
+
+
+void sort(vector<int> & pos,vector<int>& rad) {
+    if (pos.size() <= 1) return;
+
+    int mid = pos.size() / 2;
+    vector<int> leftPos;
+    vector<int> rightPos;
+    vector<int> leftRad;
+    vector<int> rightRad;
+    
+
+    
+
+    for (int j = 0; j < mid;j++){
+        leftPos.push_back(pos[j]);
+        leftRad.push_back(rad[j]);
+	}
+    for (int j = 0; j < (int)(pos.size()) - mid; j++){
+        rightPos.push_back(pos[mid + j]);
+        rightRad.push_back(rad[mid+j]);
+	}
+
+	
+	
+    sort(leftPos,leftRad);
+    sort(rightPos,rightRad);
+    mergeSort(leftPos, rightPos,leftRad,rightRad, pos,rad);
+}
+
 
 //Funcion que imprime la solucion en base a una matriz auxiliar partiendo desde la base
 //inferior derecha y siguiendo asi hasta llegar a la primera columna
@@ -185,13 +165,8 @@ int main(){
 		matrizDinamica[i]=new float [(int)posicion.size()+1];
 		binAtaques[i]=new bool [(int)posicion.size()+1];
 	}
-	/////////////////////////////////////////////////////////////////
-	ordenarVectores(&posicion,&radio);
-	for (int i = 0; i < (int)posicion.size(); i++){
-		printf("%d-%d\n",posicion[i],radio[i]);		
-	}
-	
-	
+
+	sort(posicion,radio);	
 	
 	//Se Llena las matrices creadas
 	llenarMatriz(largo,posicion,radio,matrizDinamica,binAtaques);
@@ -203,16 +178,6 @@ int main(){
 	//se imprime la solucion
 	printf("Lista de ataques:\n");
 	imprimirSolucion(posicion, radio,largo,binAtaques);
-	
-	/*
-	for (int i = 0; i <= largo; i++){
-		for (int j = 0; j <=(int)posicion.size(); j++){
-			cout << binAtaques[i][j] << "-";
-		}
-		cout << endl;
-		
-		
-	}*/
 	
 	
 }
