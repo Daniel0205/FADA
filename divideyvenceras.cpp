@@ -15,7 +15,7 @@ float pi=3.14159265359;
 void leerArchivo(int *largo,int *ancho, vector<int> *posicion, vector<int> *radio){
 	int aux;
 	
-	ifstream archivo("archivo1.txt");
+	ifstream archivo("archivo.txt");
 	archivo >> *largo;
 	archivo >> *ancho;	
 	
@@ -143,6 +143,7 @@ void sort(vector<int> & pos,vector<int>& rad) {
 //Funcion main
 int main(){
 	int largo,ancho;
+	float area=0;
 	vector<int> posicion;
 	vector<int> radio;
 	vector<int> posicion1;
@@ -157,9 +158,15 @@ int main(){
 	//cout << maxArea(posicion,radio,0,0)<< endl;
 	elementos(posicion,radio,&posicion1,&radio1);
 	
+	for (int i = 0; i < (int)radio.size(); i++){
+		area=pow(radio[i],2);
+	}
+	
+	printf("El Mayor area es de: %f\n",area*pi);
+	printf("Lista de ataques:\n");
 	
 	for (int i = 0; i < (int)posicion1.size(); i++){
-		printf("indice %d: %d-%d\n",i,posicion1[i],radio1[i]);	
+		printf("-centro: %d   -radio: %d\n",posicion1[i],radio1[i]);	
 	}
 	
 
