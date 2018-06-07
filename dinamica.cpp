@@ -17,7 +17,7 @@ int tamano;
 void leerArchivo(int *largo,int *ancho, vector<int> *posicion, vector<int> *radio){
 	int aux;
 	
-	ifstream archivo("archivo1.txt");
+	ifstream archivo("archivo.txt");
 	archivo >> *largo;
 	archivo >> *ancho;	
 	
